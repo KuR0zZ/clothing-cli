@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,6 +11,7 @@ import (
 type Handler interface {
 	AddProduct(productName string, price float64, stock int) error
 	UpdateProduct(productId int, productName string, price float64, stock int) error
+	DeleteProduct(productName string) error
 	CustomersTransactionsReport() error
 }
 
@@ -42,5 +44,29 @@ func (h *HandlerImpl) UpdateProduct(productId int, productName string, price flo
 	}
 
 	log.Print("Successfully update product")
+	return nil
+}
+
+func (h *HandlerImpl) DeleteProduct(productName string) error {
+	var exists bool
+	err := h.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM Products WHERE name=?)", productName).Scan(&exists)
+	if err != nil {
+		log.Print("Error checking product existence: ", err)
+		return err
+	}
+
+	if !exists {
+		log.Print("Product does not exist")
+		return fmt.Errorf("product with name '%s' does not exist", productName)
+	} else {
+		_, err = h.DB.Exec("DELETE FROM Products WHERE name=?", productName)
+		if err != nil {
+			log.Print("Error deleting record: ", err)
+			return err
+		}
+
+		log.Print("Product deleted successfully")
+	}
+
 	return nil
 }
