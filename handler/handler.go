@@ -10,9 +10,12 @@ import (
 
 type Handler interface {
 	AddProduct(productName string, price float64, stock int) error
+	ShowAllProducts() error
 	UpdateProduct(productId int, productName string, price float64, stock int) error
 	DeleteProduct(productName string) error
 	CustomersTransactionsReport() error
+	CurrentStockReport() error
+	TotalRevenueReport() error
 }
 
 type HandlerImpl struct {
@@ -141,6 +144,36 @@ func (h *HandlerImpl) CurrentStockReport() error {
 		}
 
 		fmt.Printf("%s\t%d\n", productName, stock)
+	}
+
+	return nil
+}
+
+func (h *HandlerImpl) TotalRevenueReport() error {
+	rows, err := h.DB.Query(`
+		SELECT p.ProductName, SUM(t.Price) AS TotalRevenue
+		FROM Products p
+		JOIN TransactionsDetails t ON p.id = t.id
+		GROUP BY p.ProductName
+		ORDER BY TotalRevenue DESC;
+		`)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var productName string
+		var totalRevenue float64
+
+		err = rows.Scan(&productName, &totalRevenue)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+
+		fmt.Printf("%s\t%.2f\n", productName, totalRevenue)
 	}
 
 	return nil
