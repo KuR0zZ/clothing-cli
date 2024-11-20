@@ -31,11 +31,13 @@ func (c *CLI) showMenu() {
 	for {
 
 		fmt.Println("Welcome to KLE-WEAR Clothing Server")
+		fmt.Println("Main Menu:")
 		fmt.Println("1. Add item")
 		fmt.Println("2. Show all products")
 		fmt.Println("3. Delete item")
 		fmt.Println("4. Update item")
 		fmt.Println("5. show report")
+		fmt.Println("6. Exit")
 
 		var choice int
 
@@ -66,12 +68,25 @@ func (c *CLI) showMenu() {
 					c.reportCurrentStock()
 				case 2:
 					c.totalRevenueReport()
-					return
 				case 3:
 
 				default:
 					fmt.Println("Invalid choice")
 				}
+
+				// ask user if they want to continue
+				var cont string
+				fmt.Println("Do you want to back to main menu? (y/n)")
+				fmt.Scan(&cont)
+
+				if cont == "y" {
+					break
+				} else if cont == "n" {
+					return
+				} else {
+					fmt.Println("Invalid choice")
+				}
+
 			}
 
 		case 6:
