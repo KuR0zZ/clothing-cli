@@ -80,6 +80,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 		log.Print("Error fetching report: ", err)
 		return err
 	}
+	defer rows.Close()
 
 	fmt.Println("Name\tNumber Of Transaction")
 	for rows.Next() {
