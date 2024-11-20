@@ -30,7 +30,7 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 }
 
 func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) error {
-	_, err := h.DB.Exec("INSERT INTO Products (ProductName, Price, Stock) VALUES (?, ?, ?);", productName, price, stock)
+	_, err := h.DB.Query("INSERT INTO Products (ProductName, Price, Stock) VALUES ($1, $2, $3);", productName, price, stock)
 	if err != nil {
 		log.Print("Error inserting product to database: ", err)
 		return err
@@ -41,7 +41,7 @@ func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) e
 }
 
 func (h *HandlerImpl) UpdateProduct(productId int, productName string, price float64, stock int) error {
-	_, err := h.DB.Exec("UPDATE Products SET ProductName = ?, Price = ?, Stock = ? WHERE productId = ?;", productName, price, stock, productId)
+	_, err := h.DB.Exec("UPDATE Products SET ProductName = $1, Price = $2, Stock = $3 WHERE productId = $4;", productName, price, stock, productId)
 	if err != nil {
 		log.Print("Error updating product: ", err)
 		return err
@@ -53,7 +53,7 @@ func (h *HandlerImpl) UpdateProduct(productId int, productName string, price flo
 
 func (h *HandlerImpl) DeleteProduct(productName string) error {
 	var exists bool
-	err := h.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM Products WHERE name=?)", productName).Scan(&exists)
+	err := h.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM Products WHERE ProductName=$1);", productName).Scan(&exists)
 	if err != nil {
 		log.Print("Error checking product existence: ", err)
 		return err
@@ -63,7 +63,7 @@ func (h *HandlerImpl) DeleteProduct(productName string) error {
 		log.Print("Product does not exist")
 		return fmt.Errorf("product with name '%s' does not exist", productName)
 	} else {
-		_, err = h.DB.Exec("DELETE FROM Products WHERE name=?", productName)
+		_, err = h.DB.Exec("DELETE FROM Products WHERE ProductName=$1;", productName)
 		if err != nil {
 			log.Print("Error deleting record: ", err)
 			return err
@@ -124,7 +124,7 @@ func (h *HandlerImpl) ShowAllProducts() error {
 			return err
 		}
 
-		fmt.Printf("%-8d %-24s %-12.2f %-6d\n", id, productName, price, stock)
+		fmt.Printf("%-3d %-24s %-12.2f %-6d\n", id, productName, price, stock)
 	}
 
 	return nil
