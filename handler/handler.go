@@ -107,8 +107,8 @@ func (h *HandlerImpl) ShowAllProducts() error {
 		return err
 	}
 
-	fmt.Println("ID\tProduct Name\tPrice\tStock")
-	fmt.Println("---------------------------------")
+	fmt.Println("ID      Product Name             Price        Stock")
+	fmt.Println("--------------------------------------------------")
 
 	defer rows.Close()
 
@@ -138,7 +138,8 @@ func (h *HandlerImpl) CurrentStockReport() error {
 		return err
 	}
 
-	fmt.Println("Product Name\tStock")
+	fmt.Println("Product Name             Stock")
+	fmt.Println("--------------------------------")
 
 	defer rows.Close()
 
@@ -152,7 +153,7 @@ func (h *HandlerImpl) CurrentStockReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%d\n", productName, stock)
+		fmt.Printf("%-24s %-6d\n", productName, stock)
 	}
 
 	return nil
@@ -170,6 +171,10 @@ func (h *HandlerImpl) TotalRevenueReport() error {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
+
+	fmt.Println("Product Name             Total Revenue")
+	fmt.Println("--------------------------------------")
+
 	defer rows.Close()
 
 	for rows.Next() {
@@ -182,7 +187,7 @@ func (h *HandlerImpl) TotalRevenueReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%.2f\n", productName, totalRevenue)
+		fmt.Printf("%-24s %-12.2f\n", productName, totalRevenue)
 	}
 
 	return nil
