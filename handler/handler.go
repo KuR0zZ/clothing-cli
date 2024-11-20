@@ -106,8 +106,8 @@ func (h *HandlerImpl) ShowAllProducts() error {
 		return err
 	}
 
-	fmt.Println("ID\tProduct Name\tPrice\tStock")
-	fmt.Println("---------------------------------")
+	fmt.Println("ID      Product Name             Price        Stock")
+	fmt.Println("--------------------------------------------------")
 
 	defer rows.Close()
 
@@ -137,7 +137,8 @@ func (h *HandlerImpl) CurrentStockReport() error {
 		return err
 	}
 
-	fmt.Println("Product Name\tStock")
+	fmt.Println("Product Name             Stock")
+	fmt.Println("--------------------------------")
 
 	defer rows.Close()
 
@@ -151,7 +152,7 @@ func (h *HandlerImpl) CurrentStockReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%d\n", productName, stock)
+		fmt.Printf("%-24s %-6d\n", productName, stock)
 	}
 
 	return nil

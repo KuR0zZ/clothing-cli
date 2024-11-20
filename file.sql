@@ -87,4 +87,4 @@ INSERT INTO TransactionsDetails (TransactionId, ProductId, Quantity, TotalPrice)
 (4, 5, 2, 4000000.00), 
 (5, 1, 1, 50000.00), 
 (5, 2, 1, 40000.00),  
-(5, 3, 3, 75000.00);  
+(5, 3, 3, 75000.00);
