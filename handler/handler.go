@@ -107,6 +107,7 @@ func (h *HandlerImpl) ShowAllProducts() error {
 	}
 
 	fmt.Println("ID\tProduct Name\tPrice\tStock")
+	fmt.Println("---------------------------------")
 
 	defer rows.Close()
 
@@ -122,7 +123,7 @@ func (h *HandlerImpl) ShowAllProducts() error {
 			return err
 		}
 
-		fmt.Printf("%d\t%s\t%.2f\t%d\n", id, productName, price, stock)
+		fmt.Printf("%-8d %-24s %-12.2f %-6d\n", id, productName, price, stock)
 	}
 
 	return nil
