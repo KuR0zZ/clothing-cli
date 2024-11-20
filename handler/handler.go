@@ -93,7 +93,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%d", customer_name, number_of_transaction)
+		fmt.Printf("%s\t%d\n", customer_name, number_of_transaction)
 	}
 	return nil
 }
