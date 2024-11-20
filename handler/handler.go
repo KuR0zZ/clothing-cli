@@ -94,7 +94,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%d", customer_name, number_of_transaction)
+		fmt.Printf("%s\t%d\n", customer_name, number_of_transaction)
 	}
 	return nil
 }
@@ -108,6 +108,7 @@ func (h *HandlerImpl) ShowAllProducts() error {
 	}
 
 	fmt.Println("ID\tProduct Name\tPrice\tStock")
+	fmt.Println("---------------------------------")
 
 	defer rows.Close()
 
@@ -123,7 +124,7 @@ func (h *HandlerImpl) ShowAllProducts() error {
 			return err
 		}
 
-		fmt.Printf("%d\t%s\t%.2f\t%d\n", id, productName, price, stock)
+		fmt.Printf("%-8d %-24s %-12.2f %-6d\n", id, productName, price, stock)
 	}
 
 	return nil
