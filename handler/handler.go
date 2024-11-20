@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -42,5 +43,28 @@ func (h *HandlerImpl) UpdateProduct(productId int, productName string, price flo
 	}
 
 	log.Print("Successfully update product")
+	return nil
+}
+
+func (h *HandlerImpl) CustomersTransactionsReport() error {
+	rows, err := h.DB.Query("SELECT Customers.Name, COUNT(Transactions.Id) AS NumberOfTransaction FROM Customers INNER JOIN Transactions ON Customers.Id = Transactions.CustomerId GROUP BY Customers.Id ORDER BY NumberOfTransaction DESC;")
+	if err != nil {
+		log.Print("Error fetching report: ", err)
+		return err
+	}
+
+	fmt.Println("Name\tNumber Of Transaction")
+	for rows.Next() {
+		var customer_name string
+		var number_of_transaction int
+
+		err = rows.Scan(&customer_name, &number_of_transaction)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+
+		fmt.Printf("%s\t%d", customer_name, number_of_transaction)
+	}
 	return nil
 }
