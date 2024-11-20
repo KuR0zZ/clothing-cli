@@ -10,7 +10,7 @@ import (
 // ConnectDB connects to the database
 func ConnectDB() *sql.DB {
 	var err error
-	DB, err := sql.Open("mysql", "root:@tcp(localhost:3306)/clothing_cli")
+	DB, err := sql.Open("mysql", "root:@tcp(localhost:3307)/clothing_cli")
 	if err != nil {
 		log.Print("Error connecting to the database: ", err)
 		log.Fatal(err)
