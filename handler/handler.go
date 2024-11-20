@@ -120,3 +120,28 @@ func (h *HandlerImpl) ShowAllProducts() error {
 
 	return nil
 }
+
+// create function report for current stock
+func (h *HandlerImpl) CurrentStockReport() error {
+	rows, err := h.DB.Query("SELECT ProductName, Stock FROM Products;")
+	if err != nil {
+		log.Print("Error fetching report: ", err)
+		return err
+	}
+
+	fmt.Println("Product Name\tStock")
+	for rows.Next() {
+		var productName string
+		var stock int
+
+		err = rows.Scan(&productName, &stock)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+
+		fmt.Printf("%s\t%d\n", productName, stock)
+	}
+
+	return nil
+}
