@@ -93,3 +93,30 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 	}
 	return nil
 }
+
+// create function to show all products
+func (h *HandlerImpl) ShowAllProducts() error {
+	rows, err := h.DB.Query("SELECT * FROM Products;")
+	if err != nil {
+		log.Print("Error fetching products: ", err)
+		return err
+	}
+
+	fmt.Println("ID\tProduct Name\tPrice\tStock")
+	for rows.Next() {
+		var id int
+		var productName string
+		var price float64
+		var stock int
+
+		err = rows.Scan(&id, &productName, &price, &stock)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+
+		fmt.Printf("%d\t%s\t%.2f\t%d\n", id, productName, price, stock)
+	}
+
+	return nil
+}
