@@ -106,6 +106,9 @@ func (h *HandlerImpl) ShowAllProducts() error {
 	}
 
 	fmt.Println("ID\tProduct Name\tPrice\tStock")
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var id int
 		var productName string
@@ -126,13 +129,16 @@ func (h *HandlerImpl) ShowAllProducts() error {
 
 // create function report for current stock
 func (h *HandlerImpl) CurrentStockReport() error {
-	rows, err := h.DB.Query("SELECT ProductName, Stock FROM Products;")
+	rows, err := h.DB.Query("SELECT ProductName, Stock FROM Products ORDER BY Stock Asc;")
 	if err != nil {
 		log.Print("Error fetching report: ", err)
 		return err
 	}
 
 	fmt.Println("Product Name\tStock")
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var productName string
 		var stock int
