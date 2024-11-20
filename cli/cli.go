@@ -29,6 +29,8 @@ func (c *CLI) Init() {
 
 func (c *CLI) showMenu() {
 	for {
+
+		fmt.Println("Welcome to KLE-WEAR Clothing Server")
 		fmt.Println("1. Add item")
 		fmt.Println("2. Show all products")
 		fmt.Println("3. Delete item")
@@ -44,7 +46,7 @@ func (c *CLI) showMenu() {
 		case 1:
 
 		case 2:
-
+			c.showAllProducts()
 		case 3:
 			c.deleteProduct()
 		case 4:
@@ -61,7 +63,7 @@ func (c *CLI) showMenu() {
 
 				switch choice2 {
 				case 1:
-
+					c.reportCurrentStock()
 				case 2:
 					c.totalRevenueReport()
 					return
@@ -101,4 +103,22 @@ func (c *CLI) totalRevenueReport() {
 		log.Fatal(err)
 	}
 
+}
+
+// create funtion error handling for showAllProducts
+func (c *CLI) showAllProducts() {
+	err := c.Handler.ShowAllProducts()
+	if err != nil {
+		log.Print("Error showing all products: ", err)
+		log.Fatal(err)
+	}
+}
+
+// create function error handling for reportCurrentStock
+func (c *CLI) reportCurrentStock() {
+	err := c.Handler.CurrentStockReport()
+	if err != nil {
+		log.Print("Error showing current stock: ", err)
+		log.Fatal(err)
+	}
 }
