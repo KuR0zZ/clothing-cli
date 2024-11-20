@@ -171,6 +171,10 @@ func (h *HandlerImpl) TotalRevenueReport() error {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
+
+	fmt.Println("Product Name             Total Revenue")
+	fmt.Println("--------------------------------------")
+
 	defer rows.Close()
 
 	for rows.Next() {
@@ -183,7 +187,7 @@ func (h *HandlerImpl) TotalRevenueReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%.2f\n", productName, totalRevenue)
+		fmt.Printf("%-24s %-12.2f\n", productName, totalRevenue)
 	}
 
 	return nil
