@@ -172,7 +172,7 @@ func (c *CLI) totalRevenueReport() {
 
 	err := c.Handler.TotalRevenueReport()
 	if err != nil {
-		log.Print("Error showing Total Revenue Per Game Report: ", err)
+		log.Print("Error showing Total Revenue Report: ", err)
 		log.Fatal(err)
 	}
 

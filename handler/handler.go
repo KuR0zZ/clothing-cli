@@ -6,6 +6,7 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 type Handler interface {
@@ -159,7 +160,7 @@ func (h *HandlerImpl) CurrentStockReport() error {
 
 func (h *HandlerImpl) TotalRevenueReport() error {
 	rows, err := h.DB.Query(`
-		SELECT p.ProductName, SUM(t.Price) AS TotalRevenue
+		SELECT p.ProductName, SUM(t.TotalPrice) AS TotalRevenue
 		FROM Products p
 		JOIN TransactionsDetails t ON p.id = t.id
 		GROUP BY p.ProductName
