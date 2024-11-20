@@ -82,7 +82,7 @@ func (c *CLI) showMenu() {
 				if cont == "y" {
 					break
 				} else if cont == "n" {
-					return
+
 				} else {
 					fmt.Println("Invalid choice")
 				}
