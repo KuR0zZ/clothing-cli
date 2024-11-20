@@ -46,13 +46,13 @@ func (c *CLI) showMenu() {
 
 		switch choice {
 		case 1:
-
+			c.addProduct()
 		case 2:
 			c.showAllProducts()
 		case 3:
 			c.deleteProduct()
 		case 4:
-
+			c.updateProduct()
 		case 5:
 			for {
 				var choice2 int
@@ -69,7 +69,7 @@ func (c *CLI) showMenu() {
 				case 2:
 					c.totalRevenueReport()
 				case 3:
-
+					c.customersTransactionsReport()
 				default:
 					fmt.Println("Invalid choice")
 				}
@@ -97,6 +97,64 @@ func (c *CLI) showMenu() {
 	}
 }
 
+func (c *CLI) addProduct() {
+	var productName string
+	var price float64
+	var stock int
+
+	fmt.Print("Enter product name: ")
+	fmt.Scan(&productName)
+
+	fmt.Print("Enter product price: ")
+	fmt.Scan(&price)
+
+	fmt.Print("Enter product stock: ")
+	fmt.Scan(&stock)
+
+	err := c.Handler.AddProduct(productName, price, stock)
+	if err != nil {
+		log.Print("Error adding product: ", err)
+		log.Fatal(err)
+	}
+
+	fmt.Println("Successfully add new product")
+}
+
+func (c *CLI) updateProduct() {
+	var productId int
+	var productName string
+	var price float64
+	var stock int
+
+	fmt.Print("Enter product id: ")
+	fmt.Scan(&productId)
+
+	fmt.Print("Enter product name: ")
+	fmt.Scan(&productName)
+
+	fmt.Print("Enter product price: ")
+	fmt.Scan(&price)
+
+	fmt.Print("Enter product stock: ")
+	fmt.Scan(&stock)
+
+	err := c.Handler.UpdateProduct(productId, productName, price, stock)
+	if err != nil {
+		log.Print("Error updating product: ", err)
+		log.Fatal(err)
+	}
+
+	fmt.Println("Successfully update a product")
+}
+
+func (c *CLI) customersTransactionsReport() {
+	err := c.Handler.CustomersTransactionsReport()
+	if err != nil {
+		log.Print("Error showing customers transactions report")
+		log.Fatal(err)
+	}
+}
+
 func (c *CLI) deleteProduct() {
 	var name string
 
@@ -114,7 +172,7 @@ func (c *CLI) totalRevenueReport() {
 
 	err := c.Handler.TotalRevenueReport()
 	if err != nil {
-		log.Print("Error showing Total Revenue Per Game Report: ", err)
+		log.Print("Error showing Total Revenue Report: ", err)
 		log.Fatal(err)
 	}
 
