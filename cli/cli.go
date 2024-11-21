@@ -80,6 +80,7 @@ func (c *CLI) showMenu() {
 
 				// ask user if they want to continue
 				var cont string
+				fmt.Println("=====================================")
 				fmt.Println("Do you want to back to main menu? (y/n)")
 				fmt.Scanln(&cont)
 
@@ -102,6 +103,8 @@ func (c *CLI) showMenu() {
 
 		// ask user if they want to continue
 		var cont string
+
+		fmt.Println("=====================================")
 		fmt.Println("Do you want to back to main menu? (y/n)")
 		fmt.Scanln(&cont)
 
