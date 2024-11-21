@@ -61,13 +61,16 @@ func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) e
 }
 
 func (h *HandlerImpl) UpdateProduct(productId int, productName string, price float64, stock int) error {
-	_, err := h.DB.Exec("UPDATE Products SET ProductName = $1, Price = $2, Stock = $3 WHERE productId = $4;", productName, price, stock, productId)
+	var updatedId int
+	err := h.DB.QueryRow("UPDATE Products SET ProductName = COALESCE(NULLIF($1, ''), ProductName), Price = COALESCE(NULLIF($2, 0), Price), Stock = COALESCE(NULLIF($3, 0), Stock) WHERE Id = $4 RETURNING Id;", productName, price, stock, productId).Scan(&updatedId)
 	if err != nil {
-		log.Print("Error updating product: ", err)
-		return err
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("product with id %d not found", productId)
+		}
+		return fmt.Errorf("error updating product: %v", err)
 	}
 
-	log.Print("Successfully update product")
+	log.Printf("Successfully updated product with ID %d", updatedId)
 	return nil
 }
 
@@ -103,7 +106,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 	}
 	defer rows.Close()
 
-	fmt.Println("Name\tNumber Of Transaction")
+	fmt.Println("Name\t\tNumber Of Transaction")
 	for rows.Next() {
 		var customer_name string
 		var number_of_transaction int
@@ -114,7 +117,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 			return err
 		}
 
-		fmt.Printf("%s\t%d\n", customer_name, number_of_transaction)
+		fmt.Printf("%s\t\t%d\n", customer_name, number_of_transaction)
 	}
 	return nil
 }

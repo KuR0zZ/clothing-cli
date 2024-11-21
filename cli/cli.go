@@ -124,6 +124,7 @@ func (c *CLI) addProduct() {
 	var productName string
 	var price float64
 	var stock int
+	var err error
 
 	reader := bufio.NewReader(os.Stdin)
 
@@ -137,42 +138,39 @@ func (c *CLI) addProduct() {
 			continue
 		}
 
-		var err error
+		break
+	}
 
-		for {
-			fmt.Print("Enter product price: ")
-			priceInput, _ := reader.ReadString('\n')
-			priceInput = strings.TrimSpace(priceInput)
+	for {
+		fmt.Print("Enter product price: ")
+		priceInput, _ := reader.ReadString('\n')
+		priceInput = strings.TrimSpace(priceInput)
 
-			price, err = strconv.ParseFloat(priceInput, 64)
-			if err != nil {
-				fmt.Println("Invalid price. Please enter a valid number")
-				continue
-			}
-
-			break
-		}
-
-		for {
-			fmt.Print("Enter product stock: ")
-			stockInput, _ := reader.ReadString('\n')
-			stockInput = strings.TrimSpace(stockInput)
-
-			stock, err = strconv.Atoi(stockInput)
-			if err != nil {
-				fmt.Println("Invalid stock. Please enter a valid integer")
-				continue
-			}
-
-			break
+		price, err = strconv.ParseFloat(priceInput, 64)
+		if err != nil {
+			fmt.Println("Invalid price. Please enter a valid number")
+			continue
 		}
 
 		break
 	}
 
-	err := c.Handler.AddProduct(productName, price, stock)
+	for {
+		fmt.Print("Enter product stock: ")
+		stockInput, _ := reader.ReadString('\n')
+		stockInput = strings.TrimSpace(stockInput)
+
+		stock, err = strconv.Atoi(stockInput)
+		if err != nil {
+			fmt.Println("Invalid stock. Please enter a valid integer")
+			continue
+		}
+
+		break
+	}
+
+	err = c.Handler.AddProduct(productName, price, stock)
 	if err != nil {
-		log.Print("Error adding product: ", err)
 		log.Fatal(err)
 	}
 
@@ -184,26 +182,69 @@ func (c *CLI) updateProduct() {
 	var productName string
 	var price float64
 	var stock int
+	var err error
 
-	fmt.Print("Enter product id: ")
-	fmt.Scan(&productId)
+	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print("Enter product name: ")
-	fmt.Scan(&productName)
+	for {
+		fmt.Print("Enter product id: ")
+		productIdInput, _ := reader.ReadString('\n')
+		productIdInput = strings.TrimSpace(productIdInput)
 
-	fmt.Print("Enter product price: ")
-	fmt.Scan(&price)
+		productId, err = strconv.Atoi(productIdInput)
 
-	fmt.Print("Enter product stock: ")
-	fmt.Scan(&stock)
+		if err != nil {
+			fmt.Println("Invalid type for product id")
+			continue
+		}
 
-	err := c.Handler.UpdateProduct(productId, productName, price, stock)
-	if err != nil {
-		log.Print("Error updating product: ", err)
-		log.Fatal(err)
+		break
 	}
 
-	fmt.Println("Successfully update a product")
+	fmt.Print("Enter product name: ")
+	productName, _ = reader.ReadString('\n')
+	productName = strings.TrimSpace(productName)
+
+	for {
+		fmt.Print("Enter product price: ")
+		priceInput, _ := reader.ReadString('\n')
+		priceInput = strings.TrimSpace(priceInput)
+
+		if priceInput == "" {
+			break
+		}
+
+		price, err = strconv.ParseFloat(priceInput, 64)
+		if err != nil {
+			fmt.Println("Invalid price. Please enter a valid number")
+			continue
+		}
+
+		break
+	}
+
+	for {
+		fmt.Print("Enter product stock: ")
+		stockInput, _ := reader.ReadString('\n')
+		stockInput = strings.TrimSpace(stockInput)
+
+		if stockInput == "" {
+			break
+		}
+
+		stock, err = strconv.Atoi(stockInput)
+		if err != nil {
+			fmt.Println("Invalid stock. Please enter a valid integer")
+			continue
+		}
+
+		break
+	}
+
+	err = c.Handler.UpdateProduct(productId, productName, price, stock)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (c *CLI) customersTransactionsReport() {
