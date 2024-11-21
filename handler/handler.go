@@ -124,13 +124,18 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 
 // create function to show all products
 func (h *HandlerImpl) ShowAllProducts() error {
-	rows, err := h.DB.Query("SELECT * FROM Products;")
+	rows, err := h.DB.Query("SELECT * FROM Products ORDER BY Id Asc;")
 	if err != nil {
 		log.Print("Error fetching products: ", err)
 		return err
 	}
 
-	fmt.Println("ID      Product Name             Price        Stock")
+	id := "ID"
+	productName := "Product Name"
+	price := "Price"
+	stock := "Stock"
+
+	fmt.Printf("%-3s %-24s %-12s %-6s\n", id, productName, price, stock)
 	fmt.Println("--------------------------------------------------")
 
 	defer rows.Close()
@@ -161,7 +166,10 @@ func (h *HandlerImpl) CurrentStockReport() error {
 		return err
 	}
 
-	fmt.Println("Product Name             Stock")
+	prodName := "Product Name"
+	stock := "Stock"
+
+	fmt.Printf("%-24s %-6s\n", prodName, stock)
 	fmt.Println("--------------------------------")
 
 	defer rows.Close()
@@ -201,7 +209,10 @@ func (h *HandlerImpl) TotalRevenueReport() error {
 		return err
 	}
 
-	fmt.Println("Product Name             Total Revenue")
+	prodName := "Product Name"
+	totalRevenue := "Total Revenue"
+
+	fmt.Printf("%-24s %-12s\n", prodName, totalRevenue)
 	fmt.Println("--------------------------------------")
 
 	defer rows.Close()

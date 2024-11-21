@@ -80,15 +80,17 @@ func (c *CLI) showMenu() {
 
 				// ask user if they want to continue
 				var cont string
+				fmt.Println("=====================================")
 				fmt.Println("Do you want to back to main menu? (y/n)")
 				fmt.Scanln(&cont)
 
 				if cont == "y" {
-					break
+					c.showMenu()
 				} else if cont == "n" {
 					return
 				} else {
 					fmt.Println("Invalid choice")
+					return
 				}
 
 			}
@@ -97,6 +99,22 @@ func (c *CLI) showMenu() {
 			return
 		default:
 			fmt.Println("Invalid choice")
+		}
+
+		// ask user if they want to continue
+		var cont string
+
+		fmt.Println("=====================================")
+		fmt.Println("Do you want to back to main menu? (y/n)")
+		fmt.Scanln(&cont)
+
+		if cont == "n" {
+			return
+		} else if cont != "y" {
+			fmt.Println("Invalid choice")
+			return
+		} else {
+			continue
 		}
 	}
 }
