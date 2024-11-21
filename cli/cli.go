@@ -2,7 +2,7 @@ package cli
 
 import (
 	"bufio"
-	"clothing-cli/handler"
+	"clothing-cli/repository"
 	"fmt"
 	"log"
 	"os"
@@ -11,10 +11,10 @@ import (
 )
 
 type CLI struct {
-	Handler handler.Handler
+	Handler repository.Repository
 }
 
-func NewCLI(handler handler.Handler) *CLI {
+func NewCLI(handler repository.Repository) *CLI {
 	return &CLI{
 		Handler: handler,
 	}
@@ -128,7 +128,7 @@ func (c *CLI) userLogin() {
 	fmt.Print("Enter password: ")
 	fmt.Scanln(&password)
 
-	err := c.Handler.UserLogin(email, password)
+	_, err := c.Handler.UserLogin(email, password)
 
 	if err != nil {
 		log.Print("Error: ", err)

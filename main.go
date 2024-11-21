@@ -4,7 +4,7 @@ package main
 import (
 	"clothing-cli/cli"
 	"clothing-cli/config"
-	"clothing-cli/handler"
+	"clothing-cli/repository"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -13,7 +13,7 @@ import (
 func main() {
 	db := config.ConnectDB()
 
-	handler := handler.NewHandler(db)
+	handler := repository.NewRepo(db)
 
 	cli := cli.NewCLI(handler)
 	cli.Init()
