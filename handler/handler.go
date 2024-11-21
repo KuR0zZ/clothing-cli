@@ -161,11 +161,17 @@ func (h *HandlerImpl) CurrentStockReport() error {
 
 func (h *HandlerImpl) TotalRevenueReport() error {
 	rows, err := h.DB.Query(`
-		SELECT p.ProductName, SUM(t.TotalPrice) AS TotalRevenue
-		FROM Products p
-		JOIN TransactionsDetails t ON p.id = t.id
-		GROUP BY p.ProductName
-		ORDER BY TotalRevenue DESC;
+		select 
+			p.ProductName,
+			sum(td.TotalPrice) as TotalRevenue
+		from 
+			TransactionsDetails td
+		join 
+			Products p on td.ProductId = p.id
+		group by 
+			p.ProductName
+		order by 
+			TotalRevenue desc;
 		`)
 	if err != nil {
 		log.Print("Error fetching records: ", err)
