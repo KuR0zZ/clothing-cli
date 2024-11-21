@@ -10,6 +10,7 @@ import (
 )
 
 type Handler interface {
+	UserLogin(email, password string) error
 	AddProduct(productName string, price float64, stock int) error
 	ShowAllProducts() error
 	UpdateProduct(productId int, productName string, price float64, stock int) error
@@ -27,6 +28,25 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 	return &HandlerImpl{
 		DB: db,
 	}
+}
+
+func (h *HandlerImpl) UserLogin(email, password string) error {
+	var dbPassword string
+
+	err := h.DB.QueryRow("SELECT Password FROM UserAdmin WHERE Email=$1;", email).Scan(&dbPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("user with email %s not found", email)
+		}
+		log.Print("Error querying user admin: ", err)
+		return err
+	}
+
+	if dbPassword != password {
+		return fmt.Errorf("incorrect password for email %s", email)
+	}
+
+	return nil
 }
 
 func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) error {

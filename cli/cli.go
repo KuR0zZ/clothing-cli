@@ -23,8 +23,8 @@ func (c *CLI) Init() {
 		}
 	}()
 
-	// show initial menu
-	c.showMenu()
+	// show user login
+	c.userLogin()
 }
 
 func (c *CLI) showMenu() {
@@ -94,6 +94,25 @@ func (c *CLI) showMenu() {
 		default:
 			fmt.Println("Invalid choice")
 		}
+	}
+}
+
+func (c *CLI) userLogin() {
+	var email, password string
+
+	fmt.Print("Enter email: ")
+	fmt.Scan(&email)
+
+	fmt.Print("Enter password: ")
+	fmt.Scan(&password)
+
+	err := c.Handler.UserLogin(email, password)
+
+	if err != nil {
+		log.Print("Error: ", err)
+		c.userLogin()
+	} else {
+		c.showMenu()
 	}
 }
 
