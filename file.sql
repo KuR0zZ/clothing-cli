@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Customers (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	Name VARCHAR(50) NOT NULL,
 	Address VARCHAR(50) NOT NULL,
-	Email VARCHAR(50) UNIQUE NOT NULL,
+	Email VARCHAR(50) UNIQUE,
 	PhoneNumber VARCHAR(15) NOT NULL
 );
 
@@ -71,20 +71,26 @@ INSERT INTO Products (ProductName, Price, Stock) VALUES
 
 -- insert data Transactions
 INSERT INTO Transactions (CustomerId, Date) VALUES
-(1, '2024-11-01'),
-(2, '2024-11-02'),
-(3, '2024-11-03'),
-(4, '2024-11-04'),
-(5, '2024-11-05');
+  (1, '2024-11-01'),
+  (2, '2024-11-12'),
+  (1, '2024-11-01'),
+  (3, '2024-11-02'),
+  (3, '2024-11-15'),
+  (4, '2024-11-04'),
+  (3, '2024-11-03'),
+  (5, '2024-11-05');
 
 -- insert data transaction details
 INSERT INTO TransactionsDetails (TransactionId, ProductId, Quantity, TotalPrice) VALUES
-(1, 1, 1, 50000.00), 
-(1, 3, 2, 50000.00),  
+(1, 1, 1, 50000.00),
+(1, 3, 2, 50000.00),
 (2, 2, 1, 40000.00),
-(3, 4, 1, 60000.00),  
-(3, 3, 1, 25000.00),   
-(4, 5, 2, 4000000.00), 
-(5, 1, 1, 50000.00), 
-(5, 2, 1, 40000.00),  
-(5, 3, 3, 75000.00);
+(3, 4, 1, 60000.00),
+(3, 3, 1, 25000.00),
+(4, 5, 2, 4000000.00),
+(5, 1, 1, 50000.00),
+(5, 2, 1, 40000.00),
+(5, 3, 3, 75000.00),
+(6, 1, 2, 100000.00),
+(7, 2, 4, 160000.00),
+(8, 5, 1, 2000000.00);

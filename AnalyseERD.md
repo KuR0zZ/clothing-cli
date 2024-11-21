@@ -8,14 +8,14 @@ A. Entity: UserAdmin
 Attributes:
 - Id INT (PK, AI)
 - Email Varchar (50) UNIQUE NOT NULL
-- Password Varchar (255) NOT NULL
+- Password Varchar (50) NOT NULL
 
 B. Entity: Customers
 Attributes:
 - Id INT (PK, AI)
 - Name Varchar(50) NOT NULL
 - Address Varchar (50) NOT NULL
-- Email Varchar (0) UNIQUE NOT NULL
+- Email Varchar (50) UNIQUE
 - PhoneNumber Varchar (15) NOT NULL - Customer's contact number (Format: +xxxxxx)
 
 C. Entity: Products
