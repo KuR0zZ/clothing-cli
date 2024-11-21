@@ -29,16 +29,16 @@ func (h *Handler) UserLogin(email, password string) error {
 	return nil
 }
 
-// func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) error {
-// 	_, err := h.DB.Query("INSERT INTO Products (ProductName, Price, Stock) VALUES ($1, $2, $3);", productName, price, stock)
-// 	if err != nil {
-// 		log.Print("Error inserting product to database: ", err)
-// 		return err
-// 	}
+func (h *Handler) AddProduct(productName string, price float64, stock int) error {
+	err := h.Repo.AddProduct(productName, price, stock)
+	if err != nil {
+		log.Print("Error inserting product to database: ", err)
+		return err
+	}
 
-// 	log.Print("Successfully add new product")
-// 	return nil
-// }
+	log.Print("Successfully add new product")
+	return nil
+}
 
 // func (h *HandlerImpl) UpdateProduct(productId int, productName string, price float64, stock int) error {
 // 	var updatedId int

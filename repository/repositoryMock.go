@@ -10,7 +10,8 @@ type RepoMock struct {
 
 // AddProduct implements Repository.
 func (r *RepoMock) AddProduct(productName string, price float64, stock int) error {
-	panic("unimplemented")
+	args := r.Called(productName, price, stock)
+	return args.Error(0)
 }
 
 // CurrentStockReport implements Repository.
