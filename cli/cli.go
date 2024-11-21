@@ -274,12 +274,15 @@ func (c *CLI) customersTransactionsReport() {
 }
 
 func (c *CLI) deleteProduct() {
-	var name string
+	var productName string
 
-	fmt.Print("Enter name: ")
-	fmt.Scan(&name)
+	reader := bufio.NewReader(os.Stdin)
 
-	err := c.Handler.DeleteProduct(name)
+	fmt.Print("Enter product name: ")
+	productName, _ = reader.ReadString('\n')
+	productName = strings.TrimSpace(productName)
+
+	err := c.Handler.DeleteProduct(productName)
 	if err != nil {
 		log.Print("Error deleting product: ", err)
 		log.Fatal(err)
