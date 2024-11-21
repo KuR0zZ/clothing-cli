@@ -1,9 +1,13 @@
 package cli
 
 import (
+	"bufio"
 	"clothing-cli/handler"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
+	"strings"
 )
 
 type CLI struct {
@@ -23,8 +27,8 @@ func (c *CLI) Init() {
 		}
 	}()
 
-	// show initial menu
-	c.showMenu()
+	// show user login
+	c.userLogin()
 }
 
 func (c *CLI) showMenu() {
@@ -42,7 +46,7 @@ func (c *CLI) showMenu() {
 		var choice int
 
 		fmt.Print("Enter your choice: ")
-		fmt.Scan(&choice)
+		fmt.Scanln(&choice)
 
 		switch choice {
 		case 1:
@@ -61,7 +65,7 @@ func (c *CLI) showMenu() {
 				fmt.Println("2. Total Revenue")
 				fmt.Println("3. Transaction Report")
 				fmt.Print("Enter your choice: ")
-				fmt.Scan(&choice2)
+				fmt.Scanln(&choice2)
 
 				switch choice2 {
 				case 1:
@@ -77,12 +81,12 @@ func (c *CLI) showMenu() {
 				// ask user if they want to continue
 				var cont string
 				fmt.Println("Do you want to back to main menu? (y/n)")
-				fmt.Scan(&cont)
+				fmt.Scanln(&cont)
 
 				if cont == "y" {
 					break
 				} else if cont == "n" {
-
+					return
 				} else {
 					fmt.Println("Invalid choice")
 				}
@@ -97,19 +101,74 @@ func (c *CLI) showMenu() {
 	}
 }
 
+func (c *CLI) userLogin() {
+	var email, password string
+
+	fmt.Print("Enter email: ")
+	fmt.Scanln(&email)
+
+	fmt.Print("Enter password: ")
+	fmt.Scanln(&password)
+
+	err := c.Handler.UserLogin(email, password)
+
+	if err != nil {
+		log.Print("Error: ", err)
+		c.userLogin()
+	} else {
+		c.showMenu()
+	}
+}
+
 func (c *CLI) addProduct() {
 	var productName string
 	var price float64
 	var stock int
 
-	fmt.Print("Enter product name: ")
-	fmt.Scan(&productName)
+	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print("Enter product price: ")
-	fmt.Scan(&price)
+	for {
+		fmt.Print("Enter product name: ")
+		productName, _ = reader.ReadString('\n')
+		productName = strings.TrimSpace(productName)
 
-	fmt.Print("Enter product stock: ")
-	fmt.Scan(&stock)
+		if productName == "" {
+			fmt.Println("No input provided. Please enter a product name")
+			continue
+		}
+
+		var err error
+
+		for {
+			fmt.Print("Enter product price: ")
+			priceInput, _ := reader.ReadString('\n')
+			priceInput = strings.TrimSpace(priceInput)
+
+			price, err = strconv.ParseFloat(priceInput, 64)
+			if err != nil {
+				fmt.Println("Invalid price. Please enter a valid number")
+				continue
+			}
+
+			break
+		}
+
+		for {
+			fmt.Print("Enter product stock: ")
+			stockInput, _ := reader.ReadString('\n')
+			stockInput = strings.TrimSpace(stockInput)
+
+			stock, err = strconv.Atoi(stockInput)
+			if err != nil {
+				fmt.Println("Invalid stock. Please enter a valid integer")
+				continue
+			}
+
+			break
+		}
+
+		break
+	}
 
 	err := c.Handler.AddProduct(productName, price, stock)
 	if err != nil {
@@ -117,7 +176,7 @@ func (c *CLI) addProduct() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Successfully add new product")
+	fmt.Println("Successfully added new product")
 }
 
 func (c *CLI) updateProduct() {
