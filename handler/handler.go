@@ -50,7 +50,7 @@ func (h *HandlerImpl) UserLogin(email, password string) error {
 }
 
 func (h *HandlerImpl) AddProduct(productName string, price float64, stock int) error {
-	_, err := h.DB.Query("INSERT INTO Products (ProductName, Price, Stock) VALUES ($1, $2, $3);", productName, price, stock)
+	_, err := h.DB.Exec("INSERT INTO Products (ProductName, Price, Stock) VALUES ($1, $2, $3);", productName, price, stock)
 	if err != nil {
 		log.Print("Error inserting product to database: ", err)
 		return err
