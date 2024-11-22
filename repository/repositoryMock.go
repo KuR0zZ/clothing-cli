@@ -26,7 +26,8 @@ func (r *RepoMock) CustomersTransactionsReport() error {
 
 // DeleteProduct implements Repository.
 func (r *RepoMock) DeleteProduct(productName string) error {
-	panic("unimplemented")
+	args := r.Called(productName)
+	return args.Error(0)
 }
 
 // ShowAllProducts implements Repository.

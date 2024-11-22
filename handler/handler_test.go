@@ -22,6 +22,9 @@ type AddProductTest struct {
 	price float64
 	stock int
 }
+type DeleteProductTest struct {
+	name string
+}
 
 func TestUserLogin(t *testing.T) {
 	user := UserLoginTest{
@@ -91,4 +94,41 @@ func TestAddProductFail(t *testing.T) {
 	assert.NotNil(t, err)                                                              // Ensure an error occurred
 	assert.Equal(t, expectedErr, err)                                                  // Ensure the returned error matches the mock
 	repoMock.AssertCalled(t, "AddProduct", product.name, product.price, product.stock) // Ensure method was called
+}
+
+func TestDeleteProduct(t *testing.T) {
+	// Arrange
+	product := DeleteProductTest{
+		name: "TestProduct",
+	}
+
+	// Mock the repository method
+	repoMock.On("DeleteProduct", product.name).Return(nil)
+
+	// Act
+	err := userHandler.DeleteProduct(product.name)
+
+	// Assert
+	assert.Nil(t, err)                                      // Ensure no error occurred
+	repoMock.AssertCalled(t, "DeleteProduct", product.name) // Ensure method was called
+}
+
+func TestDeleteProductFail(t *testing.T) {
+	// Arrange
+	product := DeleteProductTest{
+		name: "TestProduct",
+	}
+
+	expectedErr := errors.New("database error")
+
+	// Mock the repository method to return an error
+	repoMock.On("DeleteProduct", product.name).Return(expectedErr)
+
+	// Act
+	err := userHandler.DeleteProduct(product.name)
+
+	// Assert
+	assert.NotNil(t, err)                                   // Ensure an error occurred
+	assert.Equal(t, expectedErr, err)                       // Ensure the returned error matches the mock
+	repoMock.AssertCalled(t, "DeleteProduct", product.name) // Ensure method was called
 }

@@ -14,7 +14,7 @@ type Repository interface {
 	AddProduct(productName string, price float64, stock int) error
 	// ShowAllProducts() error
 	// UpdateProduct(productId int, productName string, price float64, stock int) error
-	// DeleteProduct(productName string) error
+	DeleteProduct(productName string) error
 	// CustomersTransactionsReport() error
 	// CurrentStockReport() error
 	// TotalRevenueReport() error
@@ -55,6 +55,44 @@ func (h *RepoImpl) AddProduct(productName string, price float64, stock int) erro
 		return err
 	}
 
-	log.Print("Successfully add new product")
 	return nil
 }
+
+func (h *RepoImpl) DeleteProduct(productName string) error {
+	result, err := h.DB.Exec("DELETE FROM Products WHERE ProductName=$1;", productName)
+	if err != nil {
+		return fmt.Errorf("error deleting product '%s': %v", productName, err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("product with name '%s' does not exist", productName)
+	}
+
+	return nil
+}
+
+// var exists bool
+// err := h.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM Products WHERE ProductName=$1);", productName).Scan(&exists)
+
+// if err != nil {
+// 	log.Print("Error checking product existence: ", err)
+// 	return err
+// }
+
+// if !exists {
+// 	log.Print("Product does not exist")
+// 	return fmt.Errorf("product with name '%s' does not exist", productName)
+// } else {
+// 	_, err = h.DB.Exec("DELETE FROM Products WHERE ProductName=$1;", productName)
+// 	if err != nil {
+// 		log.Print("Error deleting record: ", err)
+// 		return err
+// 	}
+// }
+
+// return nil

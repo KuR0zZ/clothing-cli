@@ -36,47 +36,20 @@ func (h *Handler) AddProduct(productName string, price float64, stock int) error
 		return err
 	}
 
-	log.Print("Successfully add new product")
+	log.Println("Successfully add new product")
 	return nil
 }
 
-// func (h *HandlerImpl) UpdateProduct(productId int, productName string, price float64, stock int) error {
-// 	var updatedId int
-// 	err := h.DB.QueryRow("UPDATE Products SET ProductName = COALESCE(NULLIF($1, ''), ProductName), Price = COALESCE(NULLIF($2, 0), Price), Stock = COALESCE(NULLIF($3, 0), Stock) WHERE Id = $4 RETURNING Id;", productName, price, stock, productId).Scan(&updatedId)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return fmt.Errorf("product with id %d not found", productId)
-// 		}
-// 		return fmt.Errorf("error updating product: %v", err)
-// 	}
+func (h *Handler) DeleteProduct(productName string) error {
+	err := h.Repo.DeleteProduct(productName)
+	if err != nil {
+		log.Print("Error deleting product in database: ", err)
+		return err
+	}
 
-// 	log.Printf("Successfully updated product with ID %d", updatedId)
-// 	return nil
-// }
-
-// func (h *HandlerImpl) DeleteProduct(productName string) error {
-// 	var exists bool
-// 	err := h.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM Products WHERE ProductName=$1);", productName).Scan(&exists)
-// 	if err != nil {
-// 		log.Print("Error checking product existence: ", err)
-// 		return err
-// 	}
-
-// 	if !exists {
-// 		log.Print("Product does not exist")
-// 		return fmt.Errorf("product with name '%s' does not exist", productName)
-// 	} else {
-// 		_, err = h.DB.Exec("DELETE FROM Products WHERE ProductName=$1;", productName)
-// 		if err != nil {
-// 			log.Print("Error deleting record: ", err)
-// 			return err
-// 		}
-
-// 		log.Print("Product deleted successfully")
-// 	}
-
-// 	return nil
-// }
+	log.Println("Product deleted successfully")
+	return nil
+}
 
 // func (h *HandlerImpl) CustomersTransactionsReport() error {
 // 	rows, err := h.DB.Query("SELECT Customers.Name, COUNT(Transactions.Id) AS NumberOfTransaction FROM Customers INNER JOIN Transactions ON Customers.Id = Transactions.CustomerId GROUP BY Customers.Id ORDER BY NumberOfTransaction DESC;")
