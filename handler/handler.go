@@ -124,7 +124,7 @@ func (h *HandlerImpl) CustomersTransactionsReport() error {
 
 // create function to show all products
 func (h *HandlerImpl) ShowAllProducts() error {
-	rows, err := h.DB.Query("SELECT * FROM Products;")
+	rows, err := h.DB.Query("SELECT * FROM Products ORDER BY Id Asc;")
 	if err != nil {
 		log.Print("Error fetching products: ", err)
 		return err
