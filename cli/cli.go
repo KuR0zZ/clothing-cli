@@ -58,43 +58,24 @@ func (c *CLI) showMenu() {
 		case 4:
 			c.updateProduct()
 		case 5:
-			for {
-				var choice2 int
-				fmt.Println("Show report:")
-				fmt.Println("1. Current Stock")
-				fmt.Println("2. Total Revenue")
-				fmt.Println("3. Transaction Report")
-				fmt.Print("Enter your choice: ")
-				fmt.Scanln(&choice2)
+			var choice2 int
+			fmt.Println("Show report:")
+			fmt.Println("1. Current Stock")
+			fmt.Println("2. Total Revenue")
+			fmt.Println("3. Transaction Report")
+			fmt.Print("Enter your choice: ")
+			fmt.Scanln(&choice2)
 
-				switch choice2 {
-				case 1:
-					c.reportCurrentStock()
-				case 2:
-					c.totalRevenueReport()
-				case 3:
-					c.customersTransactionsReport()
-				default:
-					fmt.Println("Invalid choice")
-				}
-
-				// ask user if they want to continue
-				var cont string
-				fmt.Println("=====================================")
-				fmt.Println("Do you want to back to main menu? (y/n)")
-				fmt.Scanln(&cont)
-
-				if cont == "y" {
-					c.showMenu()
-				} else if cont == "n" {
-					return
-				} else {
-					fmt.Println("Invalid choice")
-					return
-				}
-
+			switch choice2 {
+			case 1:
+				c.reportCurrentStock()
+			case 2:
+				c.totalRevenueReport()
+			case 3:
+				c.customersTransactionsReport()
+			default:
+				fmt.Println("Invalid choice")
 			}
-
 		case 6:
 			return
 		default:
